@@ -1,0 +1,81 @@
+@if (loading()) {
+  <div class="flex items-center justify-center py-24">
+    <mat-spinner diameter="40" />
+  </div>
+} @else if (persona(); as persona) {
+  <div class="mx-auto max-w-4xl space-y-6">
+    <div class="flex items-center justify-between">
+      <button mat-stroked-button (click)="onBack()">
+        <mat-icon>arrow_back</mat-icon>
+        Volver
+      </button>
+      <div class="flex gap-2">
+        <button mat-stroked-button color="primary" (click)="onEdit()">
+          <mat-icon>edit</mat-icon>
+          Editar
+        </button>
+        <button mat-flat-button color="warn" (click)="onDelete()">
+          <mat-icon>delete</mat-icon>
+          Eliminar
+        </button>
+      </div>
+    </div>
+
+    <div class="grid gap-6 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm md:grid-cols-[280px_1fr]">
+      <div class="flex items-center justify-center bg-slate-50 p-8">
+        @if (persona.foto) {
+          <img
+            [src]="personasService.fotoUrl(persona.foto)"
+            [alt]="persona.nombre"
+            class="h-52 w-52 rounded-full object-cover ring-4 ring-white shadow-lg"
+            referrerpolicy="no-referrer"
+          />
+        } @else {
+          <div class="flex h-52 w-52 items-center justify-center rounded-full bg-slate-200 text-slate-400">
+            <mat-icon class="text-7xl">person</mat-icon>
+          </div>
+        }
+      </div>
+
+      <div class="p-8">
+        <div class="flex items-center gap-3">
+          <h1 class="text-2xl font-bold text-slate-900">
+            {{ persona.nombre }} {{ persona.apellidos }}
+          </h1>
+          @if (persona.activo) {
+            <span class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">Activo</span>
+          } @else {
+            <span class="rounded-full bg-slate-200 px-3 py-1 text-xs font-semibold text-slate-600">Inactivo</span>
+          }
+        </div>
+
+        <dl class="mt-6 grid gap-4 text-sm sm:grid-cols-2">
+          <div>
+            <dt class="font-medium text-slate-500">Email</dt>
+            <dd class="mt-1 text-slate-800">{{ persona.email }}</dd>
+          </div>
+          <div>
+            <dt class="font-medium text-slate-500">Teléfono</dt>
+            <dd class="mt-1 text-slate-800">{{ persona.telefono ?? '—' }}</dd>
+          </div>
+          <div>
+            <dt class="font-medium text-slate-500">Fecha de nacimiento</dt>
+            <dd class="mt-1 text-slate-800">{{ persona.fechaNacimiento ?? '—' }}</dd>
+          </div>
+          <div>
+            <dt class="font-medium text-slate-500">Dirección</dt>
+            <dd class="mt-1 text-slate-800">{{ persona.direccion ?? '—' }}</dd>
+          </div>
+          <div>
+            <dt class="font-medium text-slate-500">Registrado el</dt>
+            <dd class="mt-1 text-slate-800">{{ persona.createdAt | date: 'medium' }}</dd>
+          </div>
+          <div>
+            <dt class="font-medium text-slate-500">Actualizado el</dt>
+            <dd class="mt-1 text-slate-800">{{ persona.updatedAt | date: 'medium' }}</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </div>
+}

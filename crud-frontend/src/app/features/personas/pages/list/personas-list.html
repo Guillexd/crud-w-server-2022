@@ -1,0 +1,101 @@
+<div class="space-y-6">
+  <header class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-slate-900">Personas</h1>
+      <p class="text-sm text-slate-500">Administra los registros y sus fotografías.</p>
+    </div>
+    <button mat-flat-button color="primary" routerLink="/personas/nuevo" class="!h-11 px-4">
+      <mat-icon>add</mat-icon>
+      Nueva persona
+    </button>
+  </header>
+
+  <mat-form-field appearance="outline" class="w-full sm:max-w-sm">
+    <mat-label>Buscar</mat-label>
+    <input
+      matInput
+      [formControl]="searchControl"
+      placeholder="Nombre, apellido o email"
+    />
+    @if (search()) {
+      <button matSuffix mat-icon-button aria-label="Limpiar" (click)="onClearSearch()">
+        <mat-icon>close</mat-icon>
+      </button>
+    } @else {
+      <mat-icon matSuffix>search</mat-icon>
+    }
+  </mat-form-field>
+
+  <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    @if (loading()) {
+      <div class="flex items-center justify-center py-24">
+        <mat-spinner diameter="40" />
+      </div>
+    } @else if (personas().length === 0) {
+      <div class="px-6 py-20 text-center text-slate-500">
+        <mat-icon class="text-5xl text-slate-300">person_off</mat-icon>
+        <p class="mt-4">No hay personas registradas.</p>
+      </div>
+    } @else {
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-slate-200 text-sm">
+          <thead class="bg-slate-50">
+            <tr>
+              <th class="px-5 py-3 text-left font-semibold text-slate-600">Foto</th>
+              <th class="px-5 py-3 text-left font-semibold text-slate-600">Nombre</th>
+              <th class="px-5 py-3 text-left font-semibold text-slate-600">Email</th>
+              <th class="px-5 py-3 text-left font-semibold text-slate-600">Teléfono</th>
+              <th class="px-5 py-3 text-right font-semibold text-slate-600">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            @for (persona of personas(); track persona.id) {
+              <tr class="transition-colors hover:bg-slate-50">
+                <td class="px-5 py-3">
+                  @if (persona.foto) {
+                    <img
+                      [src]="personasService.fotoUrl(persona.foto)"
+                      [alt]="persona.nombre"
+                      class="h-12 w-12 rounded-full object-cover ring-2 ring-slate-100"
+                      referrerpolicy="no-referrer"
+                    />
+                  } @else {
+                    <div class="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+                      <mat-icon>person</mat-icon>
+                    </div>
+                  }
+                </td>
+                <td class="px-5 py-3">
+                  <p class="font-medium text-slate-900">{{ persona.nombre }} {{ persona.apellidos }}</p>
+                  @if (persona.fechaNacimiento) {
+                    <p class="text-xs text-slate-400">Nacido: {{ persona.fechaNacimiento }}</p>
+                  }
+                </td>
+                <td class="px-5 py-3 text-slate-600">{{ persona.email }}</td>
+                <td class="px-5 py-3 text-slate-600">{{ persona.telefono ?? '—' }}</td>
+                <td class="px-5 py-3 whitespace-nowrap text-right">
+                  <button mat-icon-button color="primary" title="Ver" (click)="onView(persona)">
+                    <mat-icon>visibility</mat-icon>
+                  </button>
+                  <button mat-icon-button color="accent" title="Editar" (click)="onEdit(persona)">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button color="warn" title="Eliminar" (click)="onDelete(persona)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      <mat-paginator
+        [length]="total()"
+        [pageSize]="limit()"
+        [pageSizeOptions]="[5, 10, 20]"
+        [showFirstLastButtons]="true"
+        (page)="onPage($event)"
+      />
+    }
+  </div>
+</div>

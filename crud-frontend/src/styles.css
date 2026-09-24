@@ -1,0 +1,27 @@
+@import 'tailwindcss' source('./app');
+@import '@angular/material/prebuilt-themes/azure-blue.css';
+
+html {
+  height: 100%;
+}
+
+body {
+  color-scheme: light;
+  background-color: #f8fafc;
+  color: var(--mat-sys-on-surface, #0f172a);
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  font-size: var(--mat-sys-body-medium-size, 14px);
+  line-height: var(--mat-sys-body-medium-line-height, 1.5);
+  margin: 0;
+  height: 100%;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  text-decoration: none;
+}
+
+.mat-mdc-snack-bar-error {
+  --mdc-snackbar-container-color: #b91c1c;
+  --mdc-snackbar-supporting-text-color: #ffffff;
+}
